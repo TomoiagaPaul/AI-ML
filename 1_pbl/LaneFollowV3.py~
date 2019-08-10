@@ -1,0 +1,120 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[9]:
+
+
+
+
+# In[111]:
+
+
+import numpy as np
+import skfuzzy as fuzz
+from skfuzzy import control as ctrl
+
+
+# In[201]:
+
+
+pos = ctrl.Antecedent(np.arange(0,11,1), "position (from left boundary)")
+#sway = ctrl.Antecedent(np.arange(0,11,1), "sway")
+curve = ctrl.Antecedent(np.arange(0,11,1), "curvature")
+correction = ctrl.Consequent(np.arange(0,11,1), "correction")
+
+pos['left'] = fuzz.trimf(pos.universe, [0,3,5])
+pos['middle'] = fuzz.trimf(pos.universe, [3,5,7])
+pos['right'] = fuzz.trimf(pos.universe, [5,7,10])
+
+#sway['left'] = fuzz.trimf(sway.universe, [0,0,5])
+#sway['none'] = fuzz.trimf(sway.universe, [0,5,10])
+#sway['right'] = fuzz.trimf(sway.universe, [5,10,10])
+
+curve['left'] = fuzz.trimf(curve.universe, [0,3,5])
+curve['none'] = fuzz.trimf(curve.universe, [3,5,7])
+curve['right'] = fuzz.trimf(curve.universe, [5,7,10])
+
+correction['left turn'] = fuzz.trimf(correction.universe, [0,2,5])
+correction['drive straight'] = fuzz.trimf(correction.universe, [2,5,8])
+correction['right turn'] = fuzz.trimf(correction.universe, [5,8,10])
+
+
+# In[202]:
+
+
+pos['middle'].view()
+
+
+# In[203]:
+
+
+curve.view()
+
+
+# In[210]:
+
+
+rules = []
+rules.append(ctrl.Rule(pos['left'] & curve['left'], correction['drive straight']))
+rules.append(ctrl.Rule(pos['left'] & curve['none'] | curve['right'], correction['right turn']))
+rules.append(ctrl.Rule(pos['middle'] & curve['left'], correction['left turn']))
+rules.append(ctrl.Rule(pos['middle'] & curve['none'], correction['drive straight']))
+rules.append(ctrl.Rule(pos['middle'] & curve['right'], correction['right turn']))
+rules.append(ctrl.Rule(pos['right'] & curve['right'], correction['drive straight']))
+rules.append(ctrl.Rule(pos['right'] & curve['none'] | curve['left'], correction['left turn']))
+
+rules[0].view()
+
+
+# In[211]:
+
+
+correction_control = ctrl.ControlSystem(rules)
+
+
+# In[212]:
+
+
+correct = ctrl.ControlSystemSimulation(correction_control)
+
+
+# In[239]:
+
+
+correct.input['position (from left boundary)'] = 5
+correct.input['curvature'] = 7
+
+
+correct.compute()
+
+
+# In[240]:
+
+
+correction.view(sim=correct)
+print (correct.output['correction'])
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
