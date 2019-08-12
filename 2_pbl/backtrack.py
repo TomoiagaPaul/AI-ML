@@ -3,20 +3,25 @@ class KnightTour:
     path = 0
     
     pos_i = (0, 0)
-	
+
+    n_row = 0
+    n_col = 0
+    
     POSSIBLE_MOVES = ((2,1),(2,-1),(-2,1),(-2,-1),(1,2),(1,-2),(-1,2),(-1,-2))
     
 
     def __init__(self, rows, cols):
-        self.solution = [[0 for x in range(rows)] for y in range(cols)]
+        self.solution = [[0 for x in range(cols)] for y in range(rows)]
+        self.n_row = rows
+        self.n_col = cols
      
-    def canMove(self, row, col, N):
-        if row >= 0 and col >= 0 and row < N and col < N:
+    def canMove(self, row, col, rows, cols):
+        if row >= 0 and col >= 0 and row < rows and col < cols:
             return True
         else:
             return False
         
-    def findPath(self,row, column, index, N):
+    def findPath(self,row, column, index, rows, cols):
         if self.solution[row][column] != 0:
             return False
         
@@ -26,11 +31,11 @@ class KnightTour:
         self.solution[row][column] = self.path
 
         #solved here V
-        if index == (N * N-1):
+        if index == (rows * cols-1): #???
             return True;
          
         for move in self.POSSIBLE_MOVES:
-            if self.canMove(row + move[0], column + move[1], N) and self.findPath(row + move[0], column + move[1], index+1, N):
+            if self.canMove(row + move[0], column + move[1], rows, cols) and self.findPath(row + move[0], column + move[1], index+1, rows, cols):
                 return True;
 
 
@@ -42,7 +47,7 @@ class KnightTour:
          
         
     def solve(self):
-        if self.findPath(self.pos_i[0], self.pos_i[1], 0, len(self.solution)):
+        if self.findPath(self.pos_i[0], self.pos_i[1], 0, self.n_row, self.n_col):
             import time
             
             message = '''Traceback (most recent call last):
@@ -60,11 +65,6 @@ TypeError: findPath() takes 4 positional arguments but 5 were given'''
         else:
             print("No path found!")
                         
-    def kt_print(self):
-        for row in self.solution:
-            for item in row:
-                        
-                print(item, end='\t')
 
 rows = 6;
 cols = 5;
