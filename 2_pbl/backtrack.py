@@ -3,12 +3,12 @@ class KnightTour:
     path = 0
     
     pos_i = (0, 0)
-    
-    POSSIBLE_MOVES = [(2,1),(2,-1),(-2,1),(-2,-1),(1,2),(1,-2),(-1,2),(-1,-2)]
+	
+    POSSIBLE_MOVES = ((2,1),(2,-1),(-2,1),(-2,-1),(1,2),(1,-2),(-1,2),(-1,-2))
     
 
-    def __init__(self, N):
-        self.solution = [[0 for x in range(N)] for y in range(N)]
+    def __init__(self, rows, cols):
+        self.solution = [[0 for x in range(rows)] for y in range(cols)]
      
     def canMove(self, row, col, N):
         if row >= 0 and col >= 0 and row < N and col < N:
@@ -66,6 +66,7 @@ TypeError: findPath() takes 4 positional arguments but 5 were given'''
                         
                 print(item, end='\t')
 
-N = 6;
-my_KT = KnightTour(N)
+rows = 6;
+cols = 5;
+my_KT = KnightTour(rows, cols)
 my_KT.solve();
