@@ -39,17 +39,14 @@ class KnightTour:
         if self.solution[row][column] != 0:
             return False
 
+        #return True if solved
+        if index == (N * N-1):
+            return True;
+
         #Keep track of the step number
         self.path += 1 
         self.solution[row][column] = self.path
 
-        #Fancy printing
-        print('-'*20)
-        print('\n'.join([str(e) for e in self.solution]))
-        
-        #return True if solved
-        if index == (N * N-1):            
-            return True;
 
         #Warnsdorff's rule
         cost_move = []
@@ -65,13 +62,16 @@ class KnightTour:
             for move in self.POSSIBLE_MOVES:
                 next_row = row + move[0]
                 next_column = column + move[1]
-                
+
+                #Find the path for a open knight's tour
                 if self.canMove(next_row, next_column, N) and self.findPath(next_row, next_column, index+1, N):
+                    #Exit the recursive algorithm
                     return True
-        
+                
         for move in cost_move:
             #move[0] = onwardMoves(...), move[1] = row, move[2] = column
             if self.findPath(row + move[1], column + move[2], index+1, N):
+                #Exit the recursive algorithm
                 return True
 
         #Backtrack if the path fails, set the previous location back to 0
@@ -83,30 +83,20 @@ class KnightTour:
          
         
     def solve(self):
+        #Start finding a path recursively,
+        #Output the result at the end
         if self.findPath(self.pos_i[0], self.pos_i[1], 0, len(self.solution)):
-            import time
+            print('\nPath found!')
+            print('='*20)
             
-            message = '''Traceback (most recent call last):
-  File "backtrack.py", line 59, in <module>
-    my_KT.solve();
-  File "backtrack.py", line 46, in solve
-    if self.findPath(self.pos_i[0], self.pos_i[1], 0, len(self.solution)):
-TypeError: findPath() takes 4 positional arguments but 5 were given'''
-
-            time.sleep(1.5)
-            print(message)
-            time.sleep(1.5)
-            print("\n\nJust kidding!\n\n")
             print('\n'.join([str(e) for e in self.solution]))
         else:
             print("No path found!")
-                        
-#    def kt_print(self):
-#        print("\n\n\n\n\n\n\n\n\n\n\n\tarisenthrseinthiaernsdheinasrhda")
-#        for row in self.solution:
-#            for item in row:
-#                print(item, end='\t')
 
-N = 6;
+
+#initialise the Knight's Tour object
+N = 20;
 my_KT = KnightTour(N)
+
+#get a solution
 my_KT.solve();
