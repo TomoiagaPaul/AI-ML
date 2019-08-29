@@ -74,11 +74,11 @@ def makeMove(a, b, c, d):
                  numRem -=1
                  
             printGame(a,b,c,d) 
-     compTurn(a,b,c,d)
+     makeMove(a,b,c,d)
 
      
 
     
 
 printGame(a,b,c,d)
-playerTurn(a,b,c,d)
+makeMove(a,b,c,d)
